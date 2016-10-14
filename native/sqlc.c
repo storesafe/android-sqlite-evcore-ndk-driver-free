@@ -418,6 +418,7 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
               pplen = strlen(pptext);
 
               // NOTE: add double pplen for JSON encoding
+              // XXX FUTURE TBD add 3x/4x pplen to deal with certain UTF-8 chars
               if (rrlen + pplen + pplen + NEXT_ALLOC > arlen) {
                 char * old = rr;
                 arlen += EXTRA_ALLOC + pplen + pplen + NEXT_ALLOC;
@@ -525,9 +526,14 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
           rrlen += 5;
         }
       }
+
     }
 
     if (rv != SQLITE_OK && rv != SQLITE_DONE) {
+      const char * em = sqlite3_errmsg(mydb);
+      int emlen = strlen(em);
+      int pi = 0;
+
       if (rrlen + 200 > arlen) {
         char * old = rr;
         arlen += EXTRA_ALLOC + 200 + 50;
@@ -539,8 +545,15 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
       }
 
       // TODO REPORT CORRECT ERROR
-      strcpy(rr+rrlen, "\"error\",0,1,\"--\",");
-      rrlen += 17;
+
+      // QUICK FIX to closely emulate error code mapping of other platform implementations:
+      if (rv == 19)
+        strcpy(rr+rrlen, "\"error\",6,null,\"constraint fail (error code 19)\",");
+      else if (rv == 1)
+        strcpy(rr+rrlen, "\"error\",5,null,\"syntax error or other error (error code 1)\",");
+      else
+        sprintf(rr+rrlen, "\"error\",0,null,\"other error (code %d)\",", rv);
+      rrlen += strlen(rr+rrlen);
     }
 
     // FUTURE TODO what to do in case this returns an error
