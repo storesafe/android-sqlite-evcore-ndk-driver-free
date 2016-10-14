@@ -335,14 +335,16 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
     } else {
       for (bi=1; bi<=param_count; ++bi) {
         // FUTURE TBD BLOB
-        // TODO check bind result
+        // NOTE: Only the LAST bind result will be checked:
         if (tokn->type == JSMN_PRIMITIVE) {
           if (batch_json[tokn->start] == 'n') {
-            sqlite3_bind_null(s, bi);
+            rv = sqlite3_bind_null(s, bi);
           } else if (batch_json[tokn->start] == 't') {
-            sqlite3_bind_int(s, bi, 1);
+            // NOT EXPECTED:
+            rv = SQLITE_ERROR;
           } else if (batch_json[tokn->start] == 'f') {
-            sqlite3_bind_int(s, bi, 0);
+            // NOT EXPECTED:
+            rv = SQLITE_ERROR;
           } else {
             bool f=false;
             int iii;
@@ -359,9 +361,9 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
             nf[nflen] = '\0';
 
             if (f) {
-              sqlite3_bind_double(s, bi, atof(nf));
+              rv = sqlite3_bind_double(s, bi, atof(nf));
             } else {
-              sqlite3_bind_int64(s, bi, atoll(nf));
+              rv = sqlite3_bind_int64(s, bi, atoll(nf));
             }
           }
         } else {
@@ -371,13 +373,16 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
           char * a = malloc(tl+100); // extra padding
           int ai = (a==NULL) ? -1 : sj(batch_json+tokn->start, tl, a);
           if (a == NULL) goto batchmemoryerror1;
-          sqlite3_bind_text(s, bi, a, ai, SQLITE_TRANSIENT);
+          rv = sqlite3_bind_text(s, bi, a, ai, SQLITE_TRANSIENT);
           free(a);
         }
         ++tokn;
       }
 
-      rv=sqlite3_step(s);
+      if (rv == SQLITE_OK) {
+        rv = sqlite3_step(s);
+      }
+
       if (rv == SQLITE_ROW) {
         strcpy(rr+rrlen, "\"okrows\",");
         rrlen += 9;
