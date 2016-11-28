@@ -22,6 +22,20 @@ This is accomplished by using [GlueGen](http://jogamp.org/gluegen/www/) around t
 
 **WARNING:** The reference handles that are returned by the `EVCoreNativeDriver` library functions are raw C pointer values (with `0x100000000` added). If someone uses a reference handle that is not valid, or no longer valid with the `EVCoreNativeDriver` library the behavior is undefined (may crash, for example). It is *NOT* recommended to use this API directly unless you really understand how this library works internally.
 
+## SQLite build information
+
+**SQLite version:** `3.12.2`
+
+**SQLite build flags:**
+- `-DSQLITE_TEMP_STORE=2`
+- `-DSQLITE_THREADSAFE=2`
+- `-DSQLITE_ENABLE_FTS3`
+- `-DSQLITE_ENABLE_FTS3_PARENTHESIS`
+- `-DSQLITE_ENABLE_FTS4`
+- `-DSQLITE_ENABLE_RTREE`
+
+**NOTE:** No default page/cache size is defined, newer default values are described at <http://sqlite.org/pgszchng2016.html>.
+
 ## Dependencies
 
 - JSMN (MIT license)
