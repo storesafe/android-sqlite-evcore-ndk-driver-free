@@ -1,4 +1,4 @@
-# Android-sqlite-evcore-native-driver-free
+# Android-sqlite-evcore-native-driver-free ext-master version branch
 
 Provides a native build of sqlite with a low-level API for Cordova sqlite enterprise versions.
 
@@ -14,7 +14,9 @@ Includes JSMN (http://zserge.com/jsmn.html) under the MIT license
 
 Android-sqlite-evcore-native-driver-free provides:
 - single `EVCoreNativeDriver` class with native Java interface to the needed C functions
-- automatic build for major Android targets (`armeabi`, `armeabi-v7a`, `x86`, `x86_64`) that is accessible from the native Java interface
+- automatic build for major Android targets (`armeabi`, `armeabi-v7a`, `x86`, `x86_64`) that is accessible from the native Java interface, with the following user defined functions in this version branch:
+  - `REGEXP` integrated from [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) (based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain)
+  - `BASE64` integrated from [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64), using [brodybits / libb64-encode](https://github.com/brodybits/libb64-encode) (based on <http://libb64.sourceforge.net/> by Chris Venter, public domain)
 
 This is accomplished by using [GlueGen](http://jogamp.org/gluegen/www/) around the C module.
 

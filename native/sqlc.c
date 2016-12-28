@@ -10,6 +10,10 @@
 
 #include <stdbool.h>
 
+#include "sqlite3_regexp.h"
+
+#include "sqlite3_base64.h"
+
 #define BASE_HANDLE_OFFSET 0x100000000LL
 
 #ifdef SQLC_KEEP_ANDROID_LOG
@@ -26,6 +30,7 @@ sqlc_handle_t sqlc_evcore_db_open(int sqlc_evcore_api_version, const char * file
 {
   sqlite3 *d1;
   int r1;
+  const char * err;
 
   MYLOG("db_open %s %d", filename, flags);
 
@@ -38,7 +43,14 @@ sqlc_handle_t sqlc_evcore_db_open(int sqlc_evcore_api_version, const char * file
 
   MYLOG("db_open %s result %d ptr %p", filename, r1, d1);
 
-  return (r1 == 0) ? HANDLE_FROM_VP(d1) : -r1;
+  if (r1 != 0) return -r1;
+
+  // TBD IGNORE result:
+  sqlite3_regexp_init(d1, &err);
+
+  sqlite3_base64_init(d1);
+
+  return HANDLE_FROM_VP(d1);
 }
 
 /** FUTURE TBD (???) for sqlcipher:
