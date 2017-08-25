@@ -446,7 +446,8 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
                 rrlen += 1;
 
                 while (pi < pplen) {
-                  int pc = pptext[pi];
+                  // sqlite3_column_text() RETURNS UNSIGNED CHAR* !!!
+                  unsigned char pc = pptext[pi];
 
                   if (pc == '\\') {
                     rr[rrlen++] = '\\';
