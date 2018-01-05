@@ -12,7 +12,10 @@ regen:
 ndkbuild:
 	rm -rf lib libs
 	ndk-build
+	cp -r libs lib
+	jar cf evcore-native-driver.jar lib
+
 
 clean:
-	rm -rf obj lib libs *.jar *.zip
+	rm -rf obj lib libs *.jar *.zip *.jar
 
