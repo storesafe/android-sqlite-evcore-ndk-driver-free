@@ -10,13 +10,13 @@ regen:
 	sed -i.orig 's/^import/\/\/import/' java/io/sqlc/EVCoreNativeDriver.java
 
 ndkbuild:
-	rm -rf lib libs common-build/lib common-build/libs
+	rm -rf lib libs common-build/lib common-build/libs *.jar
 	ndk-build -C common-build
 	cp -r common-build/libs lib
 	jar cf evcore-native-driver.jar lib
 
 ext-ndkbuild:
-	rm -rf lib libs extbuild/lib extbuild/libs
+	rm -rf lib libs extbuild/lib extbuild/libs *.jar
 	ndk-build -C extbuild
 	cp -r extbuild/libs lib
 	jar cf evcore-native-driver.jar lib
