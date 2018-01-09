@@ -15,7 +15,14 @@ ndkbuild:
 	cp -r common-build/libs lib
 	jar cf evcore-native-driver.jar lib
 
+ext-ndkbuild:
+	rm -rf lib libs extbuild/lib extbuild/libs
+	ndk-build -C extbuild
+	cp -r extbuild/libs lib
+	jar cf evcore-native-driver.jar lib
+
 clean:
 	rm -rf obj lib libs *.jar *.zip *.jar
 	rm -rf common-build/obj common-build/libs
+	rm -rf extbuild/obj extbuild/libs
 

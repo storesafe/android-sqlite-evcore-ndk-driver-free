@@ -1,6 +1,6 @@
 # Android-sqlite-evcore-native-driver-free module
 
-Provides a native build of sqlite with a low-level API for Cordova sqlite enterprise versions __(common build)__.
+Provides a native build of sqlite with a low-level API for Cordova sqlite enterprise versions _(both common build and extbuild)_
 
 Based on [liteglue / Android-sqlite-native-driver](https://github.com/liteglue/Android-sqlite-native-driver).
 
@@ -14,9 +14,7 @@ Includes JSMN (<http://zserge.com/jsmn.html>) under the MIT license
 
 Android-sqlite-evcore-native-driver-free provides:
 - single `EVCoreNativeDriver` class with native Java interface to the needed C functions
-- automatic build for major Android targets (`armeabi`, `armeabi-v7a`, `x86`, `x86_64`, `arm64-v8a`) that is accessible from the native Java interface _(TBD no BASE64 or REGEXP in common build module version)_
-
-__TBD additional extbuild modules - NOT included by this common build version:__
+- automatic build for major Android targets (`armeabi`, `armeabi-v7a`, `x86`, `x86_64`, `arm64-v8a`) that is accessible from the native Java interface, with the following user defined functions __(for extbuild only)__:
   - `REGEXP` integrated from [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) (based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain)
   - `BASE64` integrated from [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64), using [brodybits / libb64-encode](https://github.com/brodybits/libb64-encode) (based on <http://libb64.sourceforge.net/> by Chris Venter, public domain)
 
@@ -37,6 +35,10 @@ This is accomplished by using [GlueGen](http://jogamp.org/gluegen/www/) around t
 - `-DSQLITE_ENABLE_FTS3_PARENTHESIS`
 - `-DSQLITE_ENABLE_FTS4`
 - `-DSQLITE_ENABLE_RTREE`
+
+Additional build flags __(for extbuild only)__:
+- `-DSQLITE_ENABLE_FTS5`
+- `-DSQLITE_ENABLE_JSON1`
 
 Additional common sqlite build flags ref: <http://sqlite.org/pgszchng2016.html>
 - `-DSQLITE_DEFAULT_PAGE_SIZE=4096`
@@ -63,9 +65,13 @@ Then to build __(for common build)__:
 
 $ `make ndkbuild`
 
-or more simply:
+_or more simply:_
 
 $ `make`
+
+__to build for extbuild:__
+
+$ `make ext-ndkbuild`
 
 ## Regenerage Java & C glue code
 
