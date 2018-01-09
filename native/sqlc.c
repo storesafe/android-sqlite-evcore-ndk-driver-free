@@ -10,9 +10,10 @@
 
 #include <stdbool.h>
 
+#if 0 // NOT IN THIS MODULE VERSION
 #include "sqlite3_regexp.h"
-
 #include "sqlite3_base64.h"
+#endif // NOT IN THIS MODULE VERSION
 
 #define BASE_HANDLE_OFFSET 0x100000000LL
 
@@ -30,7 +31,10 @@ sqlc_handle_t sqlc_evcore_db_open(int sqlc_evcore_api_version, const char * file
 {
   sqlite3 *d1;
   int r1;
+
+#if 0 // NOT IN THIS MODULE VERSION
   const char * err;
+#endif // NOT IN THIS MODULE VERSION
 
   MYLOG("db_open %s %d", filename, flags);
 
@@ -45,10 +49,11 @@ sqlc_handle_t sqlc_evcore_db_open(int sqlc_evcore_api_version, const char * file
 
   if (r1 != 0) return -r1;
 
+#if 0 // NOT IN THIS MODULE VERSION
   // TBD IGNORE result:
   sqlite3_regexp_init(d1, &err);
-
   sqlite3_base64_init(d1);
+#endif // NOT IN THIS MODULE VERSION
 
   return HANDLE_FROM_VP(d1);
 }

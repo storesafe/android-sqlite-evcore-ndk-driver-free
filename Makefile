@@ -1,6 +1,6 @@
 # top-level Makefile
 
-all: ndkbuild
+# all: ndkbuild
 
 init:
 	git submodule update --init
@@ -10,11 +10,12 @@ regen:
 	sed -i.orig 's/^import/\/\/import/' java/io/sqlc/EVCoreNativeDriver.java
 
 ndkbuild:
-	rm -rf lib libs
-	ndk-build
-	cp -r libs lib
+	rm -rf lib libs common-build/lib common-build/libs *.jar
+	ndk-build -C common-build
+	cp -r common-build/libs lib
 	jar cf evcore-native-driver.jar lib
 
 clean:
 	rm -rf obj lib libs *.jar *.zip *.jar
+	rm -rf common-build/obj common-build/libs
 
