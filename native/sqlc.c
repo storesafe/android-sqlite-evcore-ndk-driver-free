@@ -6,8 +6,6 @@
 
 #include "sqlite3.h"
 
-#include "jsmn.h"
-
 #include <stdbool.h>
 
 #include "sqlite3_regexp.h"
@@ -135,7 +133,7 @@ int sqlc_db_close(sqlc_handle_t db)
 
 struct qc_s {
   sqlite3 * mydb;
-  void * cleanup1;
+  //void * cleanup1;
   void * cleanup2;
 };
 
@@ -154,7 +152,7 @@ sqlc_handle_t sqlc_evcore_db_new_qc(sqlc_handle_t db)
   myqc = malloc(sizeof(struct qc_s));
 
   myqc->mydb = mydb;
-  myqc->cleanup1 = NULL;
+  //myqc->cleanup1 = NULL;
   myqc->cleanup2 = NULL;
 
   return HANDLE_FROM_VP(myqc);
@@ -171,7 +169,7 @@ void sqlc_evcore_qc_finalize(sqlc_handle_t qc)
 
   myqc = HANDLE_TO_VP(qc);
 
-  free(myqc->cleanup1);
+  //free(myqc->cleanup1);
   free(myqc->cleanup2);
   free(myqc);
 }
@@ -239,8 +237,10 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
   struct qc_s * myqc;
   sqlite3 * mydb;
 
-  jsmn_parser myparser;
-  jsmntok_t * tokn = NULL;
+  const char * jp1 = batch_json;
+  const char * jp2;
+  char jv;
+
   int r = -1;
 
   int as = 0;
@@ -278,40 +278,30 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
 // WORKAROUND is to do malloc/memcpy/free instead.
 // TBD VERY strange!
 
-  free(myqc->cleanup1);
-  myqc->cleanup1 = NULL;
+  //free(myqc->cleanup1);
+  //myqc->cleanup1 = NULL;
   free(myqc->cleanup2);
   myqc->cleanup2 = NULL;
 
-  myqc->cleanup1 = tokn = malloc(ll*sizeof(jsmntok_t));
+  if (*jp1 != '[') return "[\"batcherror\", \"internal error: json parse error 1\", \"extra\"]";
 
-  if (tokn == NULL) goto batchmemoryerror;
+  ++jp1;
 
-  jsmn_init(&myparser);
-  r = jsmn_parse(&myparser, batch_json, strlen(batch_json), tokn, ll);
-  if (r < 0) return "{\"message\": \"jsmn_parse error 1\"}";
+  // dbid (ignored)
+  while ((jv = *jp1) != ',') ++jp1;
 
-  // FUTURE TBD check for tok overflow?
-  //if (i >= r) return "{\"message\": \"memory error 1\"}";
-
-  if (tokn->type != JSMN_ARRAY) return "[\"batcherror\", \"internal error 1\", \"extra\"]";
-  as = tokn->size;
-  ++tokn;
-
-  // dbid
-  if (tokn->type != JSMN_PRIMITIVE) return "[\"batcherror\", \"internal error 2\", \"extra\"]";
-  ++tokn;
+  ++jp1;
 
   // flen (batch length)
-  if (tokn->type != JSMN_PRIMITIVE) return "[\"batcherror\", \"internal error 3\", \"extra\"]";
-  nflen = tokn->end-tokn->start;
-  strncpy(nf, batch_json+tokn->start, nflen);
+  jp2 = jp1;
+  while ((*jp2) != ',') ++jp2;
+
+  nflen = (jp2-jp1);
+  strncpy(nf, jp1, nflen);
   nf[nflen] = '\0';
   flen = atoi(nf);
-  ++tokn;
 
-  // extra check of first SQL statement:
-  if (tokn->type != JSMN_STRING) return "[\"batcherror\", \"internal error 4\", \"extra\"]";
+  jp1 = jp2 + 1;
 
   myqc->cleanup2 = rr = malloc(arlen = FIRST_ALLOC);
   if (rr == NULL) goto batchmemoryerror;
@@ -322,54 +312,69 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
   for (fi=0; fi<flen; ++fi) {
     int tc0 = sqlite3_total_changes(mydb);
 
-    if (tokn->type != JSMN_STRING) return "[\"batcherror\", \"internal error 5\", \"extra\"]";
+    if (*jp1 != '"') return "[\"batcherror\", \"internal error 2\", \"extra\"]";
+    ++jp1;
+
+    jp2 = jp1;
+    while ((jv = *jp2) != '"')
+      jp2 += (jv == '\\') ? 2 : 1;
+
     {
-      // XXX FUTURE TBD keep buffer & free at the end
-      int te = tokn->end;
-      int tl = tokn->end-tokn->start;
+      // XXX FUTURE TODO keep buffer & free at the end
+      int tl = (jp2-jp1);
       char * a = malloc(tl+100); // extra padding
-      int ai = (a == NULL) ? -1 : sj(batch_json+tokn->start, tl, a);
+      int ai = (a == NULL) ? -1 : sj(jp1, tl, a);
       if (a == NULL) goto batchmemoryerror;
       rv = sqlite3_prepare_v2(mydb, a, ai, &s, NULL);
       free(a);
     }
-    ++tokn;
 
-    if (tokn->type != JSMN_PRIMITIVE) return "[\"batcherror\", \"internal error 6\", \"extra\"]";
-    nflen = tokn->end-tokn->start;
-    strncpy(nf, batch_json+tokn->start, nflen);
+    jp1 = jp2 + 2;
+
+    jp2 = jp1;
+    while ((*jp2) != ',') ++jp2;
+
+    nflen = (jp2-jp1);
+    strncpy(nf, jp1, nflen);
     nf[nflen] = '\0';
     param_count = atoi(nf);
-    ++tokn;
+
+    jp1 = jp2 + 1;
 
     if (rv != SQLITE_OK) {
-      tokn = tokn + param_count;
+      // SKIP:
+      for (bi=1; bi<=param_count; ++bi) {
+        jp2 = jp1;
+        while ((*jp2) != ',') ++jp2;
+        jp1 = jp2 + 1;
+      }
     } else {
       for (bi=1; bi<=param_count; ++bi) {
         // FUTURE TBD BLOB
         // NOTE: Only the LAST bind result will be checked:
-        if (tokn->type == JSMN_PRIMITIVE) {
-          if (batch_json[tokn->start] == 'n') {
+        jv = *jp1;
+        if (jv != '"') {
+          jp2 = jp1;
+          while ((*jp2) != ',') ++jp2;
+
+          if (jv == 'n') {
             rv = sqlite3_bind_null(s, bi);
-          } else if (batch_json[tokn->start] == 't') {
+          } else if (jv == 't' || jv == 'f') {
             // NOT EXPECTED:
-            rv = SQLITE_ERROR;
-          } else if (batch_json[tokn->start] == 'f') {
-            // NOT EXPECTED:
-            rv = SQLITE_ERROR;
+            return "[\"batcherror\", \"internal error 3\", \"extra\"]";
           } else {
             bool f=false;
-            int iii;
+            const char * jp3;
 
-            for (iii=tokn->start; iii!=tokn->end; ++iii) {
-              if (batch_json[iii]=='.') {
+            for (jp3=jp1; jp3<jp2; ++jp3) {
+              if (*jp3=='.') {
                 f = true;
                 break;
               }
             }
 
-            nflen = tokn->end-tokn->start;
-            strncpy(nf, batch_json+tokn->start, nflen);
+            nflen = (jp2-jp1);
+            strncpy(nf, jp1, nflen);
             nf[nflen] = '\0';
 
             if (f) {
@@ -378,17 +383,26 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
               rv = sqlite3_bind_int64(s, bi, atoll(nf));
             }
           }
+
+          jp1 = jp2 + 1;
         } else {
           // FUTURE TBD keep buffer & free at the end??
-          int te = tokn->end;
-          int tl = tokn->end-tokn->start;
-          char * a = malloc(tl+100); // extra padding
-          int ai = (a==NULL) ? -1 : sj(batch_json+tokn->start, tl, a);
-          if (a == NULL) goto batchmemoryerror1;
-          rv = sqlite3_bind_text(s, bi, a, ai, SQLITE_TRANSIENT);
-          free(a);
+          ++jp1;
+
+          jp2 = jp1;
+          while ((jv = *jp2) != '"')
+            jp2 += (jv == '\\') ? 2 : 1;
+
+          {
+            int tl = (jp2-jp1);
+            char * a = malloc(tl+100); // extra padding
+            int ai = (a==NULL) ? -1 : sj(jp1, tl, a);
+            if (a == NULL) goto batchmemoryerror1;
+            rv = sqlite3_bind_text(s, bi, a, ai, SQLITE_TRANSIENT);
+            free(a);
+          }
+          jp1 = jp2 + 2;
         }
-        ++tokn;
       }
 
       if (rv == SQLITE_OK) {
@@ -586,8 +600,8 @@ batchmemoryerror1:
   sqlite3_finalize(s);
 
 batchmemoryerror:
-  free(myqc->cleanup1);
-  myqc->cleanup1 = NULL;
+  //free(myqc->cleanup1);
+  //myqc->cleanup1 = NULL;
   free(myqc->cleanup2);
   myqc->cleanup2 = NULL;
 

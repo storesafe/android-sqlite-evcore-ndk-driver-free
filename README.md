@@ -8,8 +8,6 @@ by Christopher J. Brody aka Chris Brody mailto: <brodybits@litehelpers.net>
 
 License: GPL v3 (<http://www.gnu.org/licenses/gpl.txt>) or commercial license options
 
-Includes JSMN (<http://zserge.com/jsmn.html>) under the MIT license
-
 ## About
 
 Android-sqlite-evcore-native-driver-free provides:
@@ -53,7 +51,6 @@ Explicit default page/cache sizes (newer default values) as described at <http:/
 
 ## Dependencies
 
-- JSMN (<http://zserge.com/jsmn.html>) - MIT license
 - SQLite (<https://sqlite.org/>) - public domain
 - [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) - based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain
 - [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64) - Unlicense (public domain) ref: <http://unlicense.org/>
