@@ -18,27 +18,34 @@ Android-sqlite-evcore-native-driver-free provides:
 
 This is accomplished by using [GlueGen](http://jogamp.org/gluegen/www/) around the C module.
 
-**NOTE:** This project references multiple subprojects, which can resolved by: $ `make init` (as described below).
+**NOTE:** This project references multiple subprojects, which may be resolved by: $ `make init` (as described below).
 
 **WARNING:** The reference handles that are returned by the `EVCoreNativeDriver` library functions are raw C pointer values (with `0x100000000` added). If someone uses a reference handle that is not valid, or no longer valid with the `EVCoreNativeDriver` library the behavior is undefined (may crash, for example). It is NOT recommended to use this API directly unless you really understand how this library works internally.
+
+FUTURE TODO: better documentation of API and some internal details
 
 ## SQLite build information
 
 ### SQLite version
 
-`3.15.2`
+    3.22.0
 
-### SQLite build flags:
+### SQLite build flags
 
-General:
-
+- `-DSQLITE_THREADSAFE=1`
+- `-DSQLITE_DEFAULT_SYNCHRONOUS=3`
+- `-DSQLITE_DEFAULT_MEMSTATUS=0`
+- `-DSQLITE_OMIT_DECLTYPE`
+- `-DSQLITE_OMIT_DEPRECATED`
+- `-DSQLITE_OMIT_PROGRESS_CALLBACK`
+- `-DSQLITE_OMIT_SHARED_CACHE`
 - `-DSQLITE_TEMP_STORE=2`
-- `-DSQLITE_THREADSAFE=2`
+- `-DSQLITE_OMIT_LOAD_EXTENSION`
 - `-DSQLITE_ENABLE_FTS3`
 - `-DSQLITE_ENABLE_FTS3_PARENTHESIS`
 - `-DSQLITE_ENABLE_FTS4`
-- `-DSQLITE_ENABLE_RTREE`
 - `-DSQLITE_ENABLE_FTS5`
+- `-DSQLITE_ENABLE_RTREE`
 - `-DSQLITE_ENABLE_JSON1`
 
 Explicit default page/cache sizes (newer default values) as described at <http://sqlite.org/pgszchng2016.html>:
@@ -56,6 +63,12 @@ Explicit default page/cache sizes (newer default values) as described at <http:/
 ## For future consideration
 
 - Support direct query of BLOB type
+
+__FUTURE TBD/TODO:__
+
+- Automatic AAR build
+- Document this project (again, perhaps in a blog post)
+- Some more SQLite API functions will be needed to rebuild the native sqlcipher library to replace the native libraries in the [@sqlcipher / android-database-sqlcipher](https://github.com/sqlcipher/android-database-sqlcipher) ([SQLCipher for Android](https://www.zetetic.net/sqlcipher/sqlcipher-for-android/)) project.
 
 # Building
 
