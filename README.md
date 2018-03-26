@@ -1,4 +1,4 @@
-# Android-sqlite-evcore-native-driver-free build (with evcore-ext user defined functions)
+# Android-sqlite-evcore(-ext)-native-driver-free build (with evcore-ext user defined functions)
 
 Provides a native build of sqlite with a low-level API for Cordova sqlite enterprise versions.
 
@@ -38,9 +38,6 @@ General:
 - `-DSQLITE_ENABLE_FTS3_PARENTHESIS`
 - `-DSQLITE_ENABLE_FTS4`
 - `-DSQLITE_ENABLE_RTREE`
-
-evcore-ext features:
-
 - `-DSQLITE_ENABLE_FTS5`
 - `-DSQLITE_ENABLE_JSON1`
 
