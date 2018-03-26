@@ -1,12 +1,11 @@
 #include "sqlc.h"
 
+#include <stdbool.h>
 #include <stddef.h> /* for NULL */
 
 #include <android/log.h>
 
 #include "sqlite3.h"
-
-#include <stdbool.h>
 
 #include "sqlite3_regexp.h"
 
