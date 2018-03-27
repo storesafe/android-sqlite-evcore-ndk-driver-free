@@ -6,7 +6,7 @@ Based on [liteglue / Android-sqlite-native-driver](https://github.com/liteglue/A
 
 by Christopher J. Brody aka Chris Brody mailto: <brodybits@litehelpers.net>
 
-License: GPL v3 (<http://www.gnu.org/licenses/gpl.txt>) or commercial license options
+License: GPL v3 (<https://www.gnu.org/licenses/gpl-3.0.txt>) or commercial license options
 
 ## About
 
