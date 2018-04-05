@@ -471,7 +471,13 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
                 rrlen += 1;
 
                 while (pi < pplen) {
-                  int pc = pptext[pi];
+                  // Use uint8_t (unsigned char) to avoid unwanted conversion
+                  // with sign extension:
+                  // sqlite3_column_text() returns pointer to unsigned char
+                  // (same thing as pointer to uint8_t)
+                  // THANKS to @spacepope (Hannes Petersen) for
+                  // pointing this one out.
+                  const uint8_t pc = pptext[pi];
 
                   if (pc == '\\') {
                     rr[rrlen++] = '\\';
