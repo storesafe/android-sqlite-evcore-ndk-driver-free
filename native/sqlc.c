@@ -180,7 +180,6 @@ int sj(const char * j, int tl, char * a)
   while (ti<tl) {
     const uint8_t c = j[ti];
     if (c == '\\') {
-      // XXX TODO TODO TODO TODO TODO
       switch(j[ti+1]) {
       case '\"':
         a[ai++] = '\"';
@@ -215,6 +214,22 @@ int sj(const char * j, int tl, char * a)
       case 'b':
         a[ai++] = '\b';
         ti += 2;
+        break;
+
+      case 'u':
+        // Needed for U+0000, vertical tab, and some others below U+0020:
+        {
+          char hex[5];
+          memcpy(hex, j+ti+2, 4);
+          hex[4] = '\0';
+          {
+            const n = strtol(hex, NULL, 16);
+            if (n < 128) a[ai++] = n;
+            // XXX TBD/TODO (???):
+            // else ...
+          }
+        }
+        ti += 6;
         break;
 
       default:
@@ -457,7 +472,7 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
               rrlen += 5;
             } else {
               pptext = sqlite3_column_text(s, jj);
-              pplen = strlen(pptext);
+              pplen = sqlite3_column_bytes(s, jj);
 
               // NOTE: add double pplen for JSON encoding
               // XXX FUTURE TBD add 3x/4x pplen to deal with certain UTF-8 chars
@@ -509,6 +524,7 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
                     rr[rrlen++] = pptext[pi++];
                     rr[rrlen++] = pptext[pi++];
                   } else if (pc >= 128) {
+                    // XXX TBD ???:
                     sprintf(rr+rrlen, "?");
                     rrlen += strlen(rr+rrlen);
                     pi += 1;
@@ -532,10 +548,14 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
                     rr[rrlen++] = '\\';
                     rr[rrlen++] = 'b';
                     pi += 1;
-                  } else {
-                    sprintf(rr+rrlen, "?%02x?", pc);
-                    rrlen += strlen(rr+rrlen);
+                  } else if (pc == 0) {
+                    rr[rrlen++] = '\\';
+                    rr[rrlen++] = '0';
                     pi += 1;
+                  } else {
+                    // other values in the range of:
+                    // (pc >= 1 && pc < 32)
+                    rr[rrlen++] = pptext[pi++];
                   }
                 }
                 strcpy(rr+rrlen, "\",");
