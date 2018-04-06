@@ -251,6 +251,7 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
   sqlite3_stmt * s = NULL;
   int rv = -1;
   int jj, cc;
+
   int param_count = 0;
   int bi = 0;
 
@@ -260,6 +261,7 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
   char * rr;
   int rrlen = 0;
   int arlen = 0;
+
   const char * pptext = 0;
   int pplen = 0;
 
