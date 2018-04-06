@@ -207,6 +207,16 @@ int sj(const char * j, int tl, char * a)
         ti += 2;
         break;
 
+      case 'f':
+        a[ai++] = '\f';
+        ti += 2;
+        break;
+
+      case 'b':
+        a[ai++] = '\b';
+        ti += 2;
+        break;
+
       default:
         // XXX TODO what to do??
         ti += 2;
@@ -513,6 +523,14 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
                   } else if (pc == '\n') {
                     rr[rrlen++] = '\\';
                     rr[rrlen++] = 'n';
+                    pi += 1;
+                  } else if (pc == '\f') {
+                    rr[rrlen++] = '\\';
+                    rr[rrlen++] = 'f';
+                    pi += 1;
+                  } else if (pc == '\b') {
+                    rr[rrlen++] = '\\';
+                    rr[rrlen++] = 'b';
                     pi += 1;
                   } else {
                     sprintf(rr+rrlen, "?%02x?", pc);
