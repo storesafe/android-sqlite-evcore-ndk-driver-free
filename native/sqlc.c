@@ -178,7 +178,7 @@ int sj(const char * j, int tl, char * a)
   int ti=0;
   int ai=0;
   while (ti<tl) {
-    char c = j[ti];
+    const uint8_t c = j[ti];
     if (c == '\\') {
       // XXX TODO TODO TODO TODO TODO
       switch(j[ti+1]) {
