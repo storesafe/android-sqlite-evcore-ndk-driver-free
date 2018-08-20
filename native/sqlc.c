@@ -572,9 +572,9 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
       int emlen = strlen(em);
       int pi = 0;
 
-      if (rrlen + 200 > arlen) {
+      if (rrlen + emlen + emlen + 100 + NEXT_ALLOC > arlen) {
         char * old = rr;
-        arlen += EXTRA_ALLOC + 200 + 50;
+        arlen += EXTRA_ALLOC + emlen + emlen + 100;
         //myqc->cleanup2 = rr = realloc(rr, arlen);
         myqc->cleanup2 = rr = malloc(arlen);
         if (rr != NULL) memcpy(rr, old, rrlen);
@@ -582,16 +582,63 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
         if (rr == NULL) goto batchmemoryerror1;
       }
 
-      // TODO REPORT CORRECT ERROR
-
       // QUICK FIX to closely emulate error code mapping of other platform implementations:
       if (rv == 19)
-        strcpy(rr+rrlen, "\"error\",6,null,\"constraint fail (error code 19)\",");
+        strcpy(rr+rrlen, "\"error\",6,null,\"constraint fail error code: 19 message: ");
       else if (rv == 1)
-        strcpy(rr+rrlen, "\"error\",5,null,\"syntax error or other error (error code 1)\",");
+        strcpy(rr+rrlen, "\"error\",5,null,\"syntax error or other error code: 1 message: ");
       else
-        sprintf(rr+rrlen, "\"error\",0,null,\"other error (code %d)\",", rv);
+        sprintf(rr+rrlen, "\"error\",0,null,\"other error code: %d message: ", rv);
       rrlen += strlen(rr+rrlen);
+
+
+        {
+            {
+                int pi=0;
+                const char * pptext = em;
+                const int pplen = emlen;
+
+                while (pi < pplen) {
+                  // Use uint8_t (unsigned char) to avoid unwanted conversion
+                  // with sign extension:
+                  // sqlite3_column_text() returns pointer to unsigned char
+                  // (same thing as pointer to uint8_t)
+                  // THANKS to @spacepope (Hannes Petersen) for
+                  // pointing this one out.
+                  const uint8_t pc = pptext[pi];
+
+                  if (pc == '\\') {
+                    rr[rrlen++] = '\\';
+                    rr[rrlen++] = '\\';
+                    pi += 1;
+                  } else if (pc == '\"') {
+                    rr[rrlen++] = '\\';
+                    rr[rrlen++] = '\"';
+                    pi += 1;
+                  } else if (pc >= 32 && pc < 127) {
+                    rr[rrlen++] = pptext[pi++];
+                  } else if (pc == '\t') {
+                    rr[rrlen++] = '\\';
+                    rr[rrlen++] = 't';
+                    pi += 1;
+                  } else if (pc == '\r') {
+                    rr[rrlen++] = '\\';
+                    rr[rrlen++] = 'r';
+                    pi += 1;
+                  } else if (pc == '\n') {
+                    rr[rrlen++] = '\\';
+                    rr[rrlen++] = 'n';
+                    pi += 1;
+                  } else {
+                    sprintf(rr+rrlen, "?%02x?", pc);
+                    rrlen += strlen(rr+rrlen);
+                    pi += 1;
+                  }
+                }
+                strcpy(rr+rrlen, "\",");
+                rrlen += 2;
+            }
+        }
     }
 
     // FUTURE TODO what to do in case this returns an error
