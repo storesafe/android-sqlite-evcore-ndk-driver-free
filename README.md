@@ -22,6 +22,8 @@ This is accomplished by using [GlueGen](http://jogamp.org/gluegen/www/) around t
 
 **WARNING:** The reference handles that are returned by the `EVCoreNativeDriver` library functions are raw C pointer values (with `0x100000000` added). If someone uses a reference handle that is not valid, or no longer valid with the `EVCoreNativeDriver` library the behavior is undefined (may crash, for example). It is NOT recommended to use this API directly unless you really understand how this library works internally.
 
+Additional build note: This project requires android-ndk pre-17 since it still supports the deprecated `armeabi` target.
+
 FUTURE TODO: better documentation of API and some internal details
 
 ## SQLite build information
