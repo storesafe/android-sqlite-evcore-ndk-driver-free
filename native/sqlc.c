@@ -491,7 +491,7 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
                     pi += 1;
                   } else if (pc >= 32 && pc < 127) {
                     rr[rrlen++] = pptext[pi++];
-                  } else if (pc > 0xe0) {
+                  } else if (pc >= 0xe0) {
                     rr[rrlen++] = pptext[pi++];
                     rr[rrlen++] = pptext[pi++];
                     rr[rrlen++] = pptext[pi++];
