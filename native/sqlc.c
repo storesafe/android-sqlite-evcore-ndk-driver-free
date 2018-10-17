@@ -173,7 +173,8 @@ void sqlc_evcore_qc_finalize(sqlc_handle_t qc)
   free(myqc);
 }
 
-int sj(const char * j, int tl, char * a)
+// XXX uint8_t ...
+int usj(const uint8_t * j, int tl, char * a)
 {
   int ti=0;
   int ai=0;
@@ -324,7 +325,7 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
       // XXX FUTURE TODO keep buffer & free at the end
       int tl = (jp2-jp1);
       char * a = malloc(tl+100); // extra padding
-      int ai = (a == NULL) ? -1 : sj(jp1, tl, a);
+      int ai = (a == NULL) ? -1 : usj(jp1, tl, a);
       if (a == NULL) goto batchmemoryerror;
       rv = sqlite3_prepare_v2(mydb, a, ai, &s, NULL);
       free(a);
@@ -446,14 +447,20 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
               strcpy(rr+rrlen, "null,");
               rrlen += 5;
             } else {
-              pptext = sqlite3_column_text(s, jj);
-              pplen = strlen(pptext);
+              // Use uint8_t (unsigned char) pointer to avoid
+              // unwanted conversion with sign extension:
+              // sqlite3_column_text() returns pointer to unsigned char
+              // (same thing as pointer to uint8_t)
+              // THANKS to @spacepope (Hannes Petersen) for
+              // pointing this one out.
+              const uint8_t * const pcutf8 = sqlite3_column_text(s, jj);
+              const int pculen = strlen(pcutf8);
 
               // NOTE: add double pplen for JSON encoding
               // XXX FUTURE TBD add 3x/4x pplen to deal with certain UTF-8 chars
-              if (rrlen + pplen + pplen + NEXT_ALLOC > arlen) {
+              if (rrlen + pculen + pculen + NEXT_ALLOC > arlen) {
                 char * old = rr;
-                arlen += EXTRA_ALLOC + pplen + pplen + NEXT_ALLOC;
+                arlen += EXTRA_ALLOC + pculen + pculen + NEXT_ALLOC;
                 //myqc->cleanup2 = rr = realloc(rr, arlen);
                 myqc->cleanup2 = rr = malloc(arlen);
                 if (rr != NULL) memcpy(rr, old, rrlen);
@@ -462,8 +469,8 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
               }
 
               if (ct == SQLITE_INTEGER || ct == SQLITE_FLOAT) {
-                strcpy(rr+rrlen, pptext);
-                rrlen += pplen;
+                memcpy(rr+rrlen, pcutf8, pculen);
+                rrlen += pculen;
                 strcpy(rr+rrlen, ",");
                 rrlen += 1;
               } else {
@@ -472,14 +479,15 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
                 strcpy(rr+rrlen, "\"");
                 rrlen += 1;
 
-                while (pi < pplen) {
-                  // Use uint8_t (unsigned char) to avoid unwanted conversion
-                  // with sign extension:
+                while (pi < pculen) {
+                  // SAME AS ABOVE:
+                  // Use uint8_t (unsigned char) pointer to avoid
+                  // unwanted conversion with sign extension:
                   // sqlite3_column_text() returns pointer to unsigned char
                   // (same thing as pointer to uint8_t)
                   // THANKS to @spacepope (Hannes Petersen) for
                   // pointing this one out.
-                  const uint8_t pc = pptext[pi];
+                  const uint8_t pc = pcutf8[pi];
 
                   if (pc == '\\') {
                     rr[rrlen++] = '\\';
@@ -490,21 +498,19 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
                     rr[rrlen++] = '\"';
                     pi += 1;
                   } else if (pc >= 32 && pc < 127) {
-                    rr[rrlen++] = pptext[pi++];
+                    rr[rrlen++] = pcutf8[pi++];
                   } else if (pc >= 0xf0) {
-                    // TBD WORKAROUND SOLUTION to avoid crash:
-                    rr[rrlen++] = '?';
-                    rr[rrlen++] = '?';
-                    rr[rrlen++] = '?';
-                    rr[rrlen++] = '?';
-                    pi += 4;
+                    rr[rrlen++] = pcutf8[pi++];
+                    rr[rrlen++] = pcutf8[pi++];
+                    rr[rrlen++] = pcutf8[pi++];
+                    rr[rrlen++] = pcutf8[pi++];
                   } else if (pc >= 0xe0) {
-                    rr[rrlen++] = pptext[pi++];
-                    rr[rrlen++] = pptext[pi++];
-                    rr[rrlen++] = pptext[pi++];
+                    rr[rrlen++] = pcutf8[pi++];
+                    rr[rrlen++] = pcutf8[pi++];
+                    rr[rrlen++] = pcutf8[pi++];
                   } else if (pc >= 0xc0) {
-                    rr[rrlen++] = pptext[pi++];
-                    rr[rrlen++] = pptext[pi++];
+                    rr[rrlen++] = pcutf8[pi++];
+                    rr[rrlen++] = pcutf8[pi++];
                   } else if (pc >= 128) {
                     sprintf(rr+rrlen, "?");
                     rrlen += strlen(rr+rrlen);
