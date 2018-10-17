@@ -214,16 +214,26 @@ int sj(const char * js, int tl, char * a)
         ti += 2;
         break;
       }
-    } else if (c >= 0xf0) {
-      a[ai++]=j[ti++];
-      a[ai++]=j[ti++];
-      a[ai++]=j[ti++];
-      a[ai++]=j[ti++];
+    } else if ((c & 0xf0) == 0xf0) {
+      //a[ai++] = '?';
+      //ti += 4;
+      sprintf(a+ai, "-%02x-", c); ai += strlen(a+ai);
+      sprintf(a+ai, "-%02x-", j[ti+1]); ai += strlen(a+ai);
+      sprintf(a+ai, "-%02x-", j[ti+2]); ai += strlen(a+ai);
+      sprintf(a+ai, "-%02x-", j[ti+3]); ai += strlen(a+ai);
+      a[ai++] = '?';
+      ti += 4;
     } else if (c >= 0xe0) {
+      sprintf(a+ai, "-%02x-", c); ai += strlen(a+ai);
+      sprintf(a+ai, "-%02x-", j[ti+1]); ai += strlen(a+ai);
+      sprintf(a+ai, "-%02x-", j[ti+2]); ai += strlen(a+ai);
+      ai += strlen(a+ai);
       a[ai++]=j[ti++];
       a[ai++]=j[ti++];
       a[ai++]=j[ti++];
     } else if (c >= 0xc0) {
+      sprintf(a+ai, "-%02x-", c); ai += strlen(a+ai);
+      sprintf(a+ai, "-%02x-", j[ti+1]); ai += strlen(a+ai);
       a[ai++]=j[ti++];
       a[ai++]=j[ti++];
     } else if (c >= 128) {
