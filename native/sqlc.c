@@ -212,6 +212,11 @@ int sj(const char * j, int tl, char * a)
         ti += 2;
         break;
       }
+    } else if (c >= 0xf0) {
+      // [WORKAROUND] - NEEDED to avoid garbage character after "?" mark
+      // on Android 6.0 and greater
+      a[ai++] = '?';
+      ti += 4;
     } else if (c >= 0xe0) {
       a[ai++]=j[ti++];
       a[ai++]=j[ti++];
@@ -492,10 +497,8 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
                   } else if (pc >= 32 && pc < 127) {
                     rr[rrlen++] = pptext[pi++];
                   } else if (pc >= 0xf0) {
-                    // TBD WORKAROUND SOLUTION to avoid crash:
-                    rr[rrlen++] = '?';
-                    rr[rrlen++] = '?';
-                    rr[rrlen++] = '?';
+                    // TBD WORKAROUND SOLUTION to avoid crash
+                    // in case of 4-byte UTF-8 character issue:
                     rr[rrlen++] = '?';
                     pi += 4;
                   } else if (pc >= 0xe0) {
