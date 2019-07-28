@@ -12,19 +12,19 @@ License: GPL v3 (<https://www.gnu.org/licenses/gpl-3.0.txt>) or commercial licen
 
 Android-sqlite-evcore-native-driver-free provides:
 - single `EVCoreNativeDriver` class with native Java interface to the needed C functions
-- automatic build for major Android targets (`armeabi`, `armeabi-v7a`, `x86`, `x86_64`, `arm64-v8a`) that is accessible from the native Java interface, with the following user defined functions:
+- automatic build for major _supported_ Android targets (~~`armeabi`,~~ `armeabi-v7a`, `x86`, `x86_64`, `arm64-v8a`) that is accessible from the native Java interface, with the following user defined functions:
   - `REGEXP` integrated from [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) (based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain)
   - `BASE64` integrated from [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64), using [brodybits / libb64-encode](https://github.com/brodybits/libb64-encode) (based on <http://libb64.sourceforge.net/> by Chris Venter, public domain)
 
 This is accomplished by using [GlueGen](http://jogamp.org/gluegen/www/) around the C module.
 
-Minimum API level: android-14 (Android 4.0)
+Minimum API level: _android-21 (Android 5.0)_
 
 **NOTE:** This project references multiple subprojects, which may be resolved by: $ `make init` (as described below).
 
 **WARNING:** The reference handles that are returned by the `EVCoreNativeDriver` library functions are raw C pointer values (with `0x100000000` added). If someone uses a reference handle that is not valid, or no longer valid with the `EVCoreNativeDriver` library the behavior is undefined (may crash, for example). It is NOT recommended to use this API directly unless you really understand how this library works internally.
 
-**BUILD NOTICE:** `android-ndk` pre-17 is needed since this project still supports the deprecated `armeabi` target CPU.
+~~**BUILD NOTICE:** `android-ndk` pre-17 is needed since this project still supports the deprecated `armeabi` target CPU.~~
 
 See the following reference for installing older `android-ndk` cask using Homebrew: <https://www.jverdeyen.be/mac/downgrade-brew-cask-application/>
 
