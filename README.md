@@ -18,7 +18,7 @@ Android-sqlite-evcore-native-driver-free provides:
 
 This is accomplished by using [GlueGen](http://jogamp.org/gluegen/www/) around the C module.
 
-Minimum API level: _android-21 (Android 5.0)_
+Minimum API level: android-23 (Android 6.0)
 
 **NOTE:** This project references multiple subprojects, which may be resolved by: $ `make init` (as described below).
 
