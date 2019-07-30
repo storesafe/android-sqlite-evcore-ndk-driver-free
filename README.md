@@ -73,6 +73,7 @@ Explicit default page/cache sizes (newer default values) as described at <http:/
 - [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) - based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain
 - [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64) - Unlicense (public domain) ref: <http://unlicense.org/>
 - [brodybits / libb64-encode](https://github.com/brodybits/libb64-encode) - based on <http://libb64.sourceforge.net/> by Chris Venter, public domain
+- [brodybits / sqlite3-eu](https://github.com/brodybits/sqlite3-eu) - UPPER & LOWER string functions with support for EU characters by Chris Brody, MIT license
 
 ## For future consideration
 

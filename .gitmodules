@@ -13,3 +13,6 @@
 [submodule "sqlite3-base64"]
 	path = sqlite3-base64
 	url = https://github.com/brodybits/sqlite3-base64.git
+[submodule "sqlite3-eu"]
+	path = sqlite3-eu
+	url = https://github.com/brodybits/sqlite3-eu.git

@@ -11,6 +11,8 @@
 
 #include "sqlite3_base64.h"
 
+#include "sqlite3_eu.h"
+
 #define BASE_HANDLE_OFFSET 0x100000000LL
 
 #ifdef SQLC_KEEP_ANDROID_LOG
@@ -48,6 +50,8 @@ sqlc_handle_t sqlc_evcore_db_open(int sqlc_evcore_api_version, const char * file
   sqlite3_regexp_init(d1, &err);
 
   sqlite3_base64_init(d1);
+
+  sqlite3_eu_init(d1, "UPPER", "LOWER");
 
   return HANDLE_FROM_VP(d1);
 }
