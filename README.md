@@ -42,7 +42,7 @@ Note that `homebrew-cask` seems to have dropped maintenance of the `android-ndk`
 
 ### SQLite version
 
-    3.26.0
+    __3.28.0__
 
 ### SQLite build flags
 
