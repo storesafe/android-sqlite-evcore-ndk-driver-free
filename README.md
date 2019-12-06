@@ -4,7 +4,7 @@ Provides a native build of sqlite with a low-level API for Cordova sqlite enterp
 
 Based on [liteglue / Android-sqlite-native-driver](https://github.com/liteglue/Android-sqlite-native-driver).
 
-by Christopher J. Brody aka Chris Brody mailto: <brodybits@litehelpers.net>
+by Christopher J. Brody aka Chris Brody mailto: <chris@brody.consulting>
 
 License: GPL v3 (<https://www.gnu.org/licenses/gpl-3.0.txt>) or commercial license options
 
@@ -34,15 +34,19 @@ To install `android-ndk` version `r16b`, for example:
 brew cask install https://raw.githubusercontent.com/Homebrew/homebrew-cask/4570652dc6a3a8f7fd2be1053dd43547a2c78e26/Casks/android-ndk.rb
 ```
 
-See also: <https://github.com/Homebrew/homebrew-cask/commits/2d99137bbb809300d720f43fe0ed979964eb5e2b/Casks/android-ndk.rb>
+Note that `homebrew-cask` seems to have restored maintenance of the `android-ndk` cask, as discussed in [`Homebrew/homebrew-cask#58883`](https://github.com/Homebrew/homebrew-cask/issues/58883).
 
-Note that `homebrew-cask` seems to have dropped maintenance of the `android-ndk` cask: <https://github.com/Homebrew/homebrew-cask/issues/58883>
+See also for some historical `android-ndk` cask information:
+
+- https://github.com/Homebrew/homebrew-cask/commits/master/Casks/android-ndk.rb
+- https://github.com/Homebrew/homebrew-cask/commits/5e9f77552aef2ffa29efe8a9b916d89686b96c7f/Casks/android-ndk.rb
+- https://github.com/Homebrew/homebrew-cask/blob/5e9f77552aef2ffa29efe8a9b916d89686b96c7f/Casks/android-ndk.rb
 
 ## SQLite build information
 
 ### SQLite version
 
-    __3.28.0__
+    3.30.1
 
 ### SQLite build flags
 
@@ -62,7 +66,7 @@ Note that `homebrew-cask` seems to have dropped maintenance of the `android-ndk`
 - `-DSQLITE_ENABLE_RTREE`
 - `-DSQLITE_ENABLE_JSON1`
 
-Explicit default page/cache sizes (newer default values) as described at <http://sqlite.org/pgszchng2016.html>:
+New stable default page size and cache size (<https://sqlite.org/pgszchng2016.html>):
 
 - `-DSQLITE_DEFAULT_PAGE_SIZE=4096`
 - `-DSQLITE_DEFAULT_CACHE_SIZE=-2000`
