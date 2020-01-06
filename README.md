@@ -1,6 +1,6 @@
-# Android-sqlite-evcore(-ext)-native-driver-free build (with evcore-ext user defined functions)
+# Android-sqlite-evcore-native-driver-free build (with evcore-ext user defined functions)
 
-Provides a native build of sqlite with a low-level API for Cordova sqlite enterprise versions.
+Provides a native build of SQLite with an optimized JSON data interface, with a low-level API for Cordova SQLite evcore plugin versions.
 
 Based on [liteglue / Android-sqlite-native-driver](https://github.com/liteglue/Android-sqlite-native-driver).
 
