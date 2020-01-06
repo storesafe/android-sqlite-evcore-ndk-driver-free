@@ -32,7 +32,9 @@ LOCAL_CFLAGS += -DSQLITE_ENABLE_FTS5
 LOCAL_CFLAGS += -DSQLITE_ENABLE_RTREE
 LOCAL_CFLAGS += -DSQLITE_ENABLE_JSON1
 
-# explicit default page/cache sizes (new defaults):
+# new stable default page size ref:
+# - http://sqlite.org/releaselog/3_12_0.html
+# - http://sqlite.org/pgszchng2016.html
 LOCAL_CFLAGS += -DSQLITE_DEFAULT_PAGE_SIZE=4096
 LOCAL_CFLAGS += -DSQLITE_DEFAULT_CACHE_SIZE=-2000
 
