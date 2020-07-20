@@ -46,7 +46,7 @@ See also for some historical `android-ndk` cask information:
 
 ### SQLite version
 
-    3.30.1
+    3.32.3
 
 ### SQLite build flags
 
