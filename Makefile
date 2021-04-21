@@ -15,5 +15,4 @@ ndkbuild:
 	jar cf evcore-native-driver.jar lib
 
 clean:
-	rm -rf obj lib libs *.jar *.zip *.jar
-
+	rm -rf java/io/sqlc/*.orig obj lib libs *.jar *.zip *.jar
