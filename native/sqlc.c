@@ -262,8 +262,8 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
   int param_count = 0;
   int bi = 0;
 
-  const FIRST_ALLOC = 10000;
-  const NEXT_ALLOC = 80; // (extra padding)
+  const int FIRST_ALLOC = 10000;
+  const int NEXT_ALLOC = 80; // (extra padding)
 
   char * rr;
   int rrlen = 0;
@@ -453,7 +453,10 @@ const char *sqlc_evcore_qc_execute(sqlc_handle_t qc, const char * batch_json, in
               strcpy(rr+rrlen, "null,");
               rrlen += 5;
             } else {
-              pptext = sqlite3_column_text(s, jj);
+              // (const char *) cast is used to avoid a conversion warning as
+              // sqlite3_column_text() returns pointer to unsigned char
+              // (same thing as pointer to uint8_t)
+              pptext = (const char *)sqlite3_column_text(s, jj);
               pplen = strlen(pptext);
 
               // NOTE: add double pplen for JSON encoding
