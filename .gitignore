@@ -1,6 +1,7 @@
 .*.swp
 *.swp
 *.orig
+io
 obj
 lib
 libs

@@ -12,9 +12,10 @@ regen:
 
 ndkbuild:
 	rm -rf lib libs *.jar
+	javac -d .  java/io/sqlc/*.java
 	ndk-build
 	cp -r libs lib
-	jar cf $(OUTPUT_JAR) lib
+	jar cf $(OUTPUT_JAR) io lib
 
 clean:
-	rm -rf java/io/sqlc/*.orig native/*.orig obj lib libs *.jar *.zip *.jar
+	rm -rf java/io/sqlc/*.orig native/*.orig io obj lib libs *.jar *.zip *.jar

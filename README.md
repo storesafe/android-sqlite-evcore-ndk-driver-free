@@ -10,7 +10,7 @@ License: GPL v3 (<https://www.gnu.org/licenses/gpl-3.0.txt>) or commercial licen
 
 ## About
 
-android-sqlite-evcore-ndk-driver-free build provides:
+android-sqlite-evcore-ndk-driver-free provides build of a JAR with the following:
 - single `EVNDKDriver` class with native Java interface to the needed C functions
 - automatic build for major _supported_ Android targets (~~`armeabi`,~~ `armeabi-v7a`, `x86`, `x86_64`, `arm64-v8a`) that is accessible from the native Java interface, with the following user defined functions:
   - `REGEXP` integrated from [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) (based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain)
