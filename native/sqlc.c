@@ -31,7 +31,7 @@ sqlc_handle_t sqlc_evcore_db_open(int sqlc_evcore_api_version, const char * file
 
   MYLOG("db_open %s %d", filename, flags);
 
-  if (sqlc_evcore_api_version != SQLC_EVCORE_API_VERSION) {
+  if (sqlc_evcore_api_version != SQLC_EV_API_VERSION) {
     __android_log_print(ANDROID_LOG_ERROR, "sqlc", "API MISMATCH ERROR");
     return -SQLC_RESULT_ERROR;
   }
