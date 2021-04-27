@@ -11,7 +11,7 @@ License: GPL v3 (<https://www.gnu.org/licenses/gpl-3.0.txt>) or commercial licen
 ## About
 
 android-sqlite-evcore-ndk-driver-free build provides:
-- single `EVCoreNativeDriver` class with native Java interface to the needed C functions
+- single `EVNDKDriver` class with native Java interface to the needed C functions
 - automatic build for major _supported_ Android targets (~~`armeabi`,~~ `armeabi-v7a`, `x86`, `x86_64`, `arm64-v8a`) that is accessible from the native Java interface, with the following user defined functions:
   - `REGEXP` integrated from [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) (based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain)
   - `BASE64` integrated from [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64), using [brodybits / libb64-encode](https://github.com/brodybits/libb64-encode) (based on <http://libb64.sourceforge.net/> by Chris Venter, public domain)
@@ -22,7 +22,7 @@ Minimum API level: __android-22 (Android 5.1)__
 
 **NOTE:** This project references multiple subprojects, which may be resolved by: $ `make init` (as described below).
 
-**WARNING:** The reference handles that are returned by the `EVCoreNativeDriver` library functions are raw C pointer values (with `0x100000000` added). If someone uses a reference handle that is not valid, or no longer valid with the `EVCoreNativeDriver` library the behavior is undefined (may crash, for example). It is NOT recommended to use this API directly unless you really understand how this library works internally.
+**WARNING:** The reference handles that are returned by the `EVNDKDriver` library functions are raw C pointer values (with `0x100000000` added). If someone uses a reference handle that is not valid, or no longer valid with the `EVNDKDriver` library the behavior is undefined (may crash, for example). It is NOT recommended to use this API directly unless you really understand how this library works internally.
 
 ## SQLite build information
 
