@@ -22,7 +22,7 @@ Minimum API level: __android-22 (Android 5.1)__
 
 **NOTE:** This project references multiple subprojects, which may be resolved by: $ `make init` (as described below).
 
-**WARNING:** The reference handles that are returned by the `EVNDKDriver` library functions are raw C pointer values (with `0x100000000` added). If someone uses a reference handle that is not valid, or no longer valid with the `EVNDKDriver` library the behavior is undefined (may crash, for example). It is NOT recommended to use this API directly unless you really understand how this library works internally.
+**WARNING:** The reference handles that are returned by the `EVNDKDriver` library functions are raw C pointer values. If someone uses a reference handle that is not valid, or no longer valid with the `EVNDKDriver` library the behavior is undefined (may crash, for example). It is NOT recommended to use this API directly unless you really understand how this library works internally.
 
 ## SQLite build information
 
