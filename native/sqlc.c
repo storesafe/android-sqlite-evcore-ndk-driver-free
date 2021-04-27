@@ -44,7 +44,7 @@ sqlc_handle_t sqlc_evcore_db_open(int sqlc_evcore_api_version, const char * file
 
   sqlite3_db_config(d1, SQLITE_DBCONFIG_DEFENSIVE, 1, NULL);
 
-  // TBD IGNORE result:
+  // TBD IGNORE result of sqlite3_regexp_init for now
   sqlite3_regexp_init(d1, &err);
 
   sqlite3_base64_init(d1);
