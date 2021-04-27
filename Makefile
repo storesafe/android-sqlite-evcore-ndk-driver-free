@@ -1,3 +1,4 @@
+OUTPUT_JAR := sqlc-evcore-ndk-driver.jar
 
 all: ndkbuild
 
@@ -13,7 +14,7 @@ ndkbuild:
 	rm -rf lib libs *.jar
 	ndk-build
 	cp -r libs lib
-	jar cf sqlc-evcore-ndk-driver.jar lib
+	jar cf $(OUTPUT_JAR) lib
 
 clean:
 	rm -rf java/io/sqlc/*.orig native/*.orig obj lib libs *.jar *.zip *.jar
