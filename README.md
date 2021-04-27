@@ -1,16 +1,16 @@
-# Android-sqlite-evcore-native-driver-free build (with evcore-ext user defined functions)
+# android-sqlite-evcore-ndk-driver-free build (with evcore-ext user defined functions)
 
-Provides a native build of SQLite with an optimized JSON data interface, with a low-level API for Cordova SQLite evcore plugin versions.
+Provides an Android NDK build of SQLite with an optimized JSON data interface, with a low-level API for Cordova SQLite evcore plugin versions.
 
 Based on [liteglue / Android-sqlite-native-driver](https://github.com/liteglue/Android-sqlite-native-driver).
 
-by Christopher J. Brody aka Chris Brody mailto: <chris@brody.consulting>
+by Christopher J. Brody aka Chris Brody mailto: <chris.brody+brodybits@gmail.com>
 
 License: GPL v3 (<https://www.gnu.org/licenses/gpl-3.0.txt>) or commercial license options
 
 ## About
 
-Android-sqlite-evcore-native-driver-free provides:
+android-sqlite-evcore-ndk-driver-free build provides:
 - single `EVCoreNativeDriver` class with native Java interface to the needed C functions
 - automatic build for major _supported_ Android targets (~~`armeabi`,~~ `armeabi-v7a`, `x86`, `x86_64`, `arm64-v8a`) that is accessible from the native Java interface, with the following user defined functions:
   - `REGEXP` integrated from [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) (based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain)
