@@ -1,6 +1,6 @@
 .*.swp
 *.swp
-*.java.orig
+*.orig
 obj
 lib
 libs
