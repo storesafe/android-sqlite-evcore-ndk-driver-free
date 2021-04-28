@@ -27,14 +27,9 @@ struct dboc_s {
   int result;
 };
 
-sqlc_handle_t sqlc_new_ev_dboc(int sqlc_ev_api_version)
+sqlc_handle_t sqlc_new_ev_dboc()
 {
   struct dboc_s * mydboc;
-
-  if (sqlc_ev_api_version != SQLC_EV_API_VERSION) {
-    __android_log_print(ANDROID_LOG_ERROR, "sqlc", "INTERNAL EV API MISMATCH ERROR");
-    return SQLC_NULL_HANDLE;
-  }
 
   mydboc = malloc(sizeof(struct dboc_s));
 

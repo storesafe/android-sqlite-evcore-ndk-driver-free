@@ -1,5 +1,4 @@
-/* API version to check: */
-#define SQLC_EV_API_VERSION 9
+/* EV NDK Driver API */
 
 #define SQLC_NULL_HANDLE    0
 
@@ -41,7 +40,7 @@ typedef long long sqlc_long_t;
 /* negative number indicates an error: */
 typedef sqlc_long_t sqlc_handle_t;
 
-sqlc_handle_t sqlc_new_ev_dboc(int sqlc_ev_api_version);
+sqlc_handle_t sqlc_new_ev_dboc();
 
 /* open database handle & store the open status per dboc handle */
 sqlc_handle_t sqlc_ev_db_open(sqlc_handle_t dboc, const char * filename, int flags);
