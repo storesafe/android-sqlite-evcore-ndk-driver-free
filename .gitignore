@@ -5,5 +5,5 @@ io
 obj
 lib
 libs
-sqlite-native-driver.jar
+*.jar
 *.zip
