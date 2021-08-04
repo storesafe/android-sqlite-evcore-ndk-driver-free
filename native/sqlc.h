@@ -1,5 +1,6 @@
-/* API version to check: */
-#define SQLC_EVCORE_API_VERSION 1
+/* EV NDK Driver API */
+
+#define SQLC_NULL_HANDLE    0
 
 /* Export some important sqlite open flags to the Java interface (VFS not supported): */
 #define SQLC_OPEN_READONLY      0x00001
@@ -39,8 +40,14 @@ typedef long long sqlc_long_t;
 /* negative number indicates an error: */
 typedef sqlc_long_t sqlc_handle_t;
 
-/* Check Java/native library match and open database handle */
-sqlc_handle_t sqlc_evcore_db_open(int sqlc_evcore_api_version, const char * filename, int flags);
+sqlc_handle_t sqlc_new_ev_dboc();
+
+/* open database handle & store the open status per dboc handle */
+sqlc_handle_t sqlc_ev_db_open(sqlc_handle_t dboc, const char * filename, int flags);
+
+int sqlc_ev_db_open_result(sqlc_handle_t dboc);
+
+void sqlc_ev_dboc_finalize(sqlc_handle_t dboc);
 
 // FUTURE TBD (???) for sqlcipher:
 //  int sqlc_db_key_bytes(sqlc_handle_t db, unsigned char *key_bytes, int num_bytes);

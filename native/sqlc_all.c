@@ -7,9 +7,9 @@
 
 #include "sqlite3_eu.c"
 
-#include "sqlc.h" /* types needed for EVCoreNativeDriver_JNI.c */
+#include "sqlc.h" /* types needed for EVNDKDriver_JNI.c */
 
-#include "EVCoreNativeDriver_JNI.c"
+#include "EVNDKDriver_JNI.c"
 
 #include "sqlc.c"
 
