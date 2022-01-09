@@ -1,4 +1,4 @@
-# android-sqlite-evcore-ndk-driver-free build (with evcore-ext user defined functions)
+# android-sqlite-evcore-ndk-driver-free build - evcore-eu-support-2022 version branch
 
 Provides an Android NDK build of SQLite with an optimized JSON data interface, with a low-level API for Cordova SQLite evcore plugin versions.
 
@@ -15,6 +15,7 @@ android-sqlite-evcore-ndk-driver-free provides build of a JAR with the following
 - automatic build for major _supported_ Android targets (~~`armeabi`,~~ `armeabi-v7a`, `x86`, `x86_64`, `arm64-v8a`) that is accessible from the native Java interface, with the following user defined functions:
   - `REGEXP` integrated from [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) (based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain)
   - `BASE64` integrated from [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64), using [brodybits / libb64-encode](https://github.com/brodybits/libb64-encode) (based on <http://libb64.sourceforge.net/> by Chris Venter, public domain)
+  - replacement `UPPER` & `LOWER` string functions from [brodybits / sqlite3-eu](https://github.com/brodybits/sqlite3-eu) with support for some EU characters
 
 This is accomplished by using [GlueGen](http://jogamp.org/gluegen/www/) around the C module.
 
@@ -79,7 +80,7 @@ New stable default page size and cache size (<https://sqlite.org/pgszchng2016.ht
 - [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) - based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain
 - [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64) - Unlicense (public domain) ref: <http://unlicense.org/>
 - [brodybits / libb64-encode](https://github.com/brodybits/libb64-encode) - based on <http://libb64.sourceforge.net/> by Chris Venter, public domain
-- [brodybits / sqlite3-eu](https://github.com/brodybits/sqlite3-eu) - UPPER & LOWER string functions with support for EU characters by Chris Brody, MIT license
+- [brodybits / sqlite3-eu](https://github.com/brodybits/sqlite3-eu) - `UPPER` & `LOWER` string functions with support for some EU characters by C. Brody, MIT license
 
 ## For future consideration
 
