@@ -12,9 +12,9 @@ License: GPL v3 (<https://www.gnu.org/licenses/gpl-3.0.txt>) or commercial licen
 
 android-sqlite-evcore-ndk-driver-free provides build of a JAR with the following:
 - single `EVNDKDriver` class with native Java interface to the needed C functions
-- automatic build for major _supported_ Android targets (~~`armeabi`,~~ `armeabi-v7a`, `x86`, `x86_64`, `arm64-v8a`) that is accessible from the native Java interface, with the following user defined functions:
+- automatic build for _current_ _Android NDK targets (`armeabi-v7a`, `x86`, `x86_64`, `arm64-v8a`)_ that is accessible from the native Java interface, with the following user defined functions:
   - `REGEXP` integrated from [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) (based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain)
-  - `BASE64` integrated from [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64), using [brodybits / libb64-encode](https://github.com/brodybits/libb64-encode) (based on <http://libb64.sourceforge.net/> by Chris Venter, public domain)
+  - `BASE64` and `BLOBFROMBASE64` integrated from [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64), using [brodybits / libb64-core](https://github.com/brodybits/libb64-core) (based on <http://libb64.sourceforge.net/> by Chris Venter, public domain)
 
 This is accomplished by using [GlueGen](http://jogamp.org/gluegen/www/) around the C module.
 
@@ -78,7 +78,7 @@ New stable default page size and cache size (<https://sqlite.org/pgszchng2016.ht
 - SQLite (<https://sqlite.org/>) - public domain
 - [brodybits / sqlite3-regexp-cached](https://github.com/brodybits/sqlite3-regexp-cached) - based on <http://git.altlinux.org/people/at/packages/?p=sqlite3-pcre.git> by Alexey Tourbin, public domain
 - [brodybits / sqlite3-base64](https://github.com/brodybits/sqlite3-base64) - Unlicense (public domain) ref: <http://unlicense.org/>
-- [brodybits / libb64-encode](https://github.com/brodybits/libb64-encode) - based on <http://libb64.sourceforge.net/> by Chris Venter, public domain
+- [brodybits / libb64-core](https://github.com/brodybits/libb64-core) - based on <http://libb64.sourceforge.net/> by Chris Venter, public domain
 
 ## For future consideration
 
