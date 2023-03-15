@@ -1,4 +1,4 @@
-# android-sqlite-evcore-ndk-driver-free build (with evcore-ext user defined functions)
+# android-sqlite-evcore-ndk-driver-free
 
 Provides an Android NDK build of SQLite with an optimized JSON data interface, with a low-level API for Cordova SQLite evcore plugin versions.
 
