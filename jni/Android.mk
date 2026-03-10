@@ -34,6 +34,7 @@ LOCAL_CFLAGS += -DSQLITE_ENABLE_JSON1
 LOCAL_CFLAGS += -DSQLITE_ENABLE_MATH_FUNCTIONS
 
 LOCAL_CFLAGS += -DNDEBUG
+LOCAL_CFLAGS += -DUSLEEP
 
 # new stable default page size ref:
 # - http://sqlite.org/releaselog/3_12_0.html

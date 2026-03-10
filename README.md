@@ -69,6 +69,7 @@ FUTURE TODO: better documentation of API and some internal details
 - `-DSQLITE_ENABLE_JSON1`
 - `-DSQLITE_ENABLE_MATH_FUNCTIONS`
 - `-DNDEBUG`
+- `-DUSLEEP`
 
 New stable default page size and cache size (<https://sqlite.org/pgszchng2016.html>):
 
